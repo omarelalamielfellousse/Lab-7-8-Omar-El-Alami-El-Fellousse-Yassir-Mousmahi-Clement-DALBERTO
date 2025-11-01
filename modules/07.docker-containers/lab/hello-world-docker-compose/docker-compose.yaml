@@ -2,10 +2,20 @@ version: '3'
 services:
   redis:
     image: redis
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - redis-data:/data
+
   web:
     # COMPLETE HERE
     build: .
     ports:
       - "5000:8080"
+    depends_on:
+      - redis
     environment:
-      # ...
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+
+volumes:
+  redis-data:
